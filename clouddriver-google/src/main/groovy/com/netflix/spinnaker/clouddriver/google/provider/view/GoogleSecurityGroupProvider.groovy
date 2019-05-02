@@ -94,6 +94,12 @@ class GoogleSecurityGroupProvider implements SecurityGroupProvider<GoogleSecurit
     def data = cacheView.getAll(SECURITY_GROUPS.ns, identifiers, RelationshipCacheFilter.none())
     def transformed = data.collect(transform)
 
+    def transformedUnique = transformed.unique(false) { a,b ->
+      a.id <=> b.id
+    }
+
+    log.debug("Before trim: ${transformed.size()}, After trim: ${transformedUnique.size()}")
+
     return transformed
   }
 
